@@ -37,16 +37,18 @@ window.findNRooksSolution = function(n) {
 
 
   var subRoutine = function(matrix, numRooks) {
-    var x = numRooks;
-    for (var r = 0; r < n; r++) {
+    for (var r = numRooks; r < n; r++) {
       for (var c = 0; c < n; c++) {
         var m = copyMatrix(matrix);
+        var x = numRooks;
         if ( m[r][c] === 0 ) {
           m[r][c] = 1;
+          x++;
           if ( x < n ) {
-            subRoutine(m, x + 1);
+            subRoutine(m, x);
           }
-        } else if (x === n) {
+        }
+        if (x === n) {
           // check if m has conflict
           var board = new Board(m);
           if (!board.hasAnyRooksConflicts()) {
@@ -57,11 +59,11 @@ window.findNRooksSolution = function(n) {
     }
   };
 
-
-
   subRoutine(generateEmptyMatrix(n), 0);
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+            console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+            return solution;
+
+
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
@@ -70,16 +72,20 @@ window.countNRooksSolutions = function(n) {
   var solutionObj = {};
 
   var subRoutine = function(matrix, numRooks) {
-    var x = numRooks;
-    for (var r = 0; r < n; r++) {
+    for (var r = numRooks; r < n; r++) {
       for (var c = 0; c < n; c++) {
         var m = copyMatrix(matrix);
+        var x = numRooks;
         if ( m[r][c] === 0 ) {
+          // if copied m as a matrix and did newcopiedmatrix[r][c] = 1
+          //  would the newcopiedmatrix passs AnyRooksConflict
           m[r][c] = 1;
+          x++;
           if ( x < n ) {
-            subRoutine(m, x + 1);
+            subRoutine(m, x);
           }
-        } else if (x === n) {
+        }
+        if (x === n) {
           // check if m has conflict
           var board = new Board(m);
           if (!board.hasAnyRooksConflicts()) {
@@ -93,6 +99,7 @@ window.countNRooksSolutions = function(n) {
   subRoutine(generateEmptyMatrix(n), 0);
 
   solutionCount = Object.keys(solutionObj).length;
+  console.log(solutionObj);
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
@@ -135,6 +142,33 @@ window.countNRooksSolutions = function(n) {
 window.findNQueensSolution = function(n) {
   var solution = undefined; //fixme
 
+
+
+  var subRoutine = function(matrix, numQueens) {
+    for (var r = numQueens; r < n; r++) {
+      for (var c = 0; c < n; c++) {
+        var m = copyMatrix(matrix);
+        var x = numQueens;
+        if ( m[r][c] === 0 ) {
+          m[r][c] = 1;
+          x++;
+          if ( x < n ) {
+            subRoutine(m, x);
+          }
+        }
+        if (x === n) {
+          // check if m has conflict
+          var board = new Board(m);
+          if (!board.hasAnyQueensConflicts()) {
+            solution = m;
+          }
+        }
+      }
+    }
+  };
+
+  subRoutine(generateEmptyMatrix(n), 0);
+
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
@@ -143,7 +177,39 @@ window.findNQueensSolution = function(n) {
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
   var solutionCount = undefined; //fixme
+  var solutionObj = {};
 
+  var subRoutine = function(matrix, numQueens, colArray) {
+    for (var r = numQueens; r < n; r++) {
+      for (var c = 0; c < n; c++) {
+        var m = copyMatrix(matrix);
+        var x = numQueens;
+        //column check prune it
+        if ( m[r][c] === 0 && colArray.indexOf(c) !== -1) {
+          // if copied m as a matrix and did newcopiedmatrix[r][c] = 1
+          //  would the newcopiedmatrix passs AnyQueensConflict
+          m[r][c] = 1;
+          x++;
+          if ( x < n ) {
+            var copiedColArray = colArray.slice();
+            copiedColArray.push(c);
+            subRoutine(m, x, copiedColArray);
+          }
+        }
+        if (x === n) {
+          // check if m has conflict
+          var board = new Board(m);
+          if (!board.hasAnyQueensConflicts()) {
+            solutionObj[JSON.stringify(m)] = true;
+          }
+        }
+      }
+    }
+  };
+
+  subRoutine(generateEmptyMatrix(n), 0);
+
+  solutionCount = Object.keys(solutionObj).length;
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
