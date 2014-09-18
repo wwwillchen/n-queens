@@ -138,8 +138,8 @@ window.hasAnyColConflicts= function() {
 // --------------------------------------------------------------
 //
 // test if a specific major diagonal on this board contains a conflict
-window.hasMajorDiagonalConflictAt= function(rowIndex, colIndex) {
-  var current = this.attributes[rowIndex][colIndex];
+window.hasMajorDiagonalConflictAt= function(matrix, rowIndex, colIndex) {
+  var current = matrix[rowIndex][colIndex];
   var counter = 0;
   while (current !== undefined) {
     if (current === 1) {
@@ -147,8 +147,8 @@ window.hasMajorDiagonalConflictAt= function(rowIndex, colIndex) {
     }
     rowIndex++;
     colIndex++;
-    if(colIndex < this.attributes.n && rowIndex < this.attributes.n) {
-      current = this.attributes[rowIndex][colIndex];
+    if(colIndex < matrix.length && rowIndex < matrix.length) {
+      current = matrix[rowIndex][colIndex];
     } else {
       current = undefined;
     }
@@ -182,8 +182,8 @@ window.hasAnyMajorDiagonalConflicts= function() {
 // --------------------------------------------------------------
 //
 // test if a specific minor diagonal on this board contains a conflict
-window.hasMinorDiagonalConflictAt= function(rowIndex, colIndex) {
-  var current = this.attributes[rowIndex][colIndex];
+window.hasMinorDiagonalConflictAt= function(matrix, rowIndex, colIndex) {
+  var current = matrix[rowIndex][colIndex];
   var counter = 0;
   while (current !== undefined) {
     if (current === 1) {
@@ -191,8 +191,8 @@ window.hasMinorDiagonalConflictAt= function(rowIndex, colIndex) {
     }
     rowIndex++;
     colIndex--;
-    if(colIndex >= 0 && rowIndex < this.attributes.n) {
-      current = this.attributes[rowIndex][colIndex];
+    if(colIndex >= 0 && rowIndex < matrix.length) {
+      current = matrix[rowIndex][colIndex];
     } else {
       current = undefined;
     }
