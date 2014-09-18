@@ -185,7 +185,7 @@ window.countNQueensSolutions = function(n) {
         var m = copyMatrix(matrix);
         var x = numQueens;
         //column check prune it
-        if ( m[r][c] === 0 && colArray.indexOf(c) !== -1) {
+        if ( m[r][c] === 0 ) {//&& colArray.indexOf(c) !== -1) {
           // if copied m as a matrix and did newcopiedmatrix[r][c] = 1
           //  would the newcopiedmatrix passs AnyQueensConflict
           m[r][c] = 1;
@@ -207,7 +207,7 @@ window.countNQueensSolutions = function(n) {
     }
   };
 
-  subRoutine(generateEmptyMatrix(n), 0);
+  subRoutine(generateEmptyMatrix(n), 0, []);
 
   solutionCount = Object.keys(solutionObj).length;
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);

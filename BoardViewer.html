@@ -47,11 +47,14 @@
           [0, 0, 1, 0]
         ]);
 
-        var n = 6;
+        var n = 5;
         // findNRooksSolution(n);
         // countNRooksSolutions(n);
         findNQueensSolution(n);
+        var startTime = new Date().getTime();
         countNQueensSolutions(n);
+        var endTime = new Date().getTime();
+        console.log("Time:", endTime - startTime);
       });
     </script>
   </body>
