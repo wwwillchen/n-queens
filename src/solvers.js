@@ -185,15 +185,28 @@ window.countNQueensSolutions = function(n) {
         var m = copyMatrix(matrix);
         var x = numQueens;
         //column check prune it
-        if ( m[r][c] === 0 ) {//&& colArray.indexOf(c) !== -1) {
-          // if copied m as a matrix and did newcopiedmatrix[r][c] = 1
-          //  would the newcopiedmatrix passs AnyQueensConflict
-          m[r][c] = 1;
-          x++;
-          if ( x < n ) {
-            var copiedColArray = colArray.slice();
-            copiedColArray.push(c);
-            subRoutine(m, x, copiedColArray);
+        if ( m[r][c] === 0 && colArray.indexOf(c) === -1) {
+          var diagRow, diagCol;
+          var diagMajorDiff = Math.min(r,c);
+          diagRow = r - diagMajorDiff;
+          diagCol = c - diagMajorDiff;
+          var hasMjConflict = hasMajorDiagonalConflictAt(m, diagRow, diagCol)
+
+          var diagMinorDiff = Math.min(r,n-c-1);
+          diagRow = r - diagMinorDiff;
+          diagCol = c + diagMinorDiff;
+          var hasMnConflict = hasMinorDiagonalConflictAt(m, diagRow, diagCol);
+          if (!hasMjConflict && !hasMnConflict) {
+
+            // if copied m as a matrix and did newcopiedmatrix[r][c] = 1
+            //  would the newcopiedmatrix passs AnyQueensConflict
+            m[r][c] = 1;
+            x++;
+            if ( x < n ) {
+              var copiedColArray = colArray.slice();
+              copiedColArray.push(c);
+              subRoutine(m, x, copiedColArray);
+            }
           }
         }
         if (x === n) {
