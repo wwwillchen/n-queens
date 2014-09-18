@@ -31,6 +31,12 @@ window.copyMatrix = function(matrix) {
   return newMatrix;
 };
 
+window.printMatrix = function(matrix) {
+  for (var i = 0; i < matrix.length; i++) {
+    console.log(matrix[i])
+  }
+}
+
 window.findNRooksSolution = function(n) {
   var solution = undefined; //fixme
 
@@ -176,44 +182,38 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
-  var solutionObj = {};
+  var solutionCount = 0; //fixme
 
   var subRoutine = function(matrix, numQueens, colArray) {
-    for (var r = numQueens; r < n; r++) {
-      for (var c = 0; c < n; c++) {
-        var m = copyMatrix(matrix);
-        var x = numQueens;
-        //column check prune it
-        if ( m[r][c] === 0 && colArray.indexOf(c) === -1) {
-          var diagRow, diagCol;
-          var diagMajorDiff = Math.min(r,c);
-          diagRow = r - diagMajorDiff;
-          diagCol = c - diagMajorDiff;
-          var hasMjConflict = hasMajorDiagonalConflictAt(m, diagRow, diagCol)
+    var r = numQueens;
+    for (var c = 0; c < n; c++) {
+      var m = copyMatrix(matrix);
+      var x = numQueens;
+      //column check prune it
+      if ( m[r][c] === 0 && colArray.indexOf(c) === -1) {
+        var diagRow, diagCol;
+        var diagMajorDiff = Math.min(r,c);
+        diagRow = r - diagMajorDiff;
+        diagCol = c - diagMajorDiff;
+        var hasMjConflict = hasMajorDiagonalConflictAt(m, diagRow, diagCol);
 
-          var diagMinorDiff = Math.min(r,n-c-1);
-          diagRow = r - diagMinorDiff;
-          diagCol = c + diagMinorDiff;
-          var hasMnConflict = hasMinorDiagonalConflictAt(m, diagRow, diagCol);
-          if (!hasMjConflict && !hasMnConflict) {
+        var diagMinorDiff = Math.min(r,n-c-1);
+        diagRow = r - diagMinorDiff;
+        diagCol = c + diagMinorDiff;
+        var hasMnConflict = hasMinorDiagonalConflictAt(m, diagRow, diagCol);
+        if (!hasMjConflict && !hasMnConflict) {
 
-            // if copied m as a matrix and did newcopiedmatrix[r][c] = 1
-            //  would the newcopiedmatrix passs AnyQueensConflict
-            m[r][c] = 1;
-            x++;
-            if ( x < n ) {
-              var copiedColArray = colArray.slice();
-              copiedColArray.push(c);
-              subRoutine(m, x, copiedColArray);
-            }
-          }
-        }
-        if (x === n) {
-          // check if m has conflict
-          var board = new Board(m);
-          if (!board.hasAnyQueensConflicts()) {
-            solutionObj[JSON.stringify(m)] = true;
+          // if copied m as a matrix and did newcopiedmatrix[r][c] = 1
+          //  would the newcopiedmatrix passs AnyQueensConflict
+          m[r][c] = 1;
+          x++;
+          if ( x < n ) {
+            var copiedColArray = colArray.slice();
+            copiedColArray.push(c);
+            subRoutine(m, x, copiedColArray);
+          } else if (x === n) {
+            // check if m has conflict
+              solutionCount++;
           }
         }
       }
@@ -222,7 +222,8 @@ window.countNQueensSolutions = function(n) {
 
   subRoutine(generateEmptyMatrix(n), 0, []);
 
-  solutionCount = Object.keys(solutionObj).length;
+  // solutionCount = Object.keys(solutionObj).length;
+  // console.log('Board Count (solutions)' + boardCount);
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };

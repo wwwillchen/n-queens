@@ -142,7 +142,7 @@ window.hasMajorDiagonalConflictAt= function(matrix, rowIndex, colIndex) {
   var current = matrix[rowIndex][colIndex];
   var counter = 0;
   while (current !== undefined) {
-    if (current === 1) {
+    if (current !== 0) {
       counter++;
     }
     rowIndex++;
@@ -153,7 +153,7 @@ window.hasMajorDiagonalConflictAt= function(matrix, rowIndex, colIndex) {
       current = undefined;
     }
   }
-  return (counter > 1); // fixme
+  return (counter > 0); // fixme
 };
 
 // test if any major diagonals on this board contain conflicts
@@ -186,7 +186,7 @@ window.hasMinorDiagonalConflictAt= function(matrix, rowIndex, colIndex) {
   var current = matrix[rowIndex][colIndex];
   var counter = 0;
   while (current !== undefined) {
-    if (current === 1) {
+    if (current !== 0) {
       counter++;
     }
     rowIndex++;
@@ -197,7 +197,7 @@ window.hasMinorDiagonalConflictAt= function(matrix, rowIndex, colIndex) {
       current = undefined;
     }
   }
-  return (counter > 1); // fixme
+  return (counter > 0); // fixme
 };
 
 // test if any minor diagonals on this board contain conflicts

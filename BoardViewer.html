@@ -27,6 +27,7 @@
     <script src="lib/underscore.js"></script>
     <script src="lib/backbone.js"></script>
     <script src="src/Board.js"></script>
+    <script src="src/BoardFuncs.js"></script>
     <script src="src/BoardView.js"></script>
     <script src="src/solvers.js"></script>
     <script>
@@ -47,14 +48,18 @@
           [0, 0, 1, 0]
         ]);
 
-        var n = 5;
+        var n = 12;
         // findNRooksSolution(n);
         // countNRooksSolutions(n);
-        findNQueensSolution(n);
+        // findNQueensSolution(n);
+        var expected = {1:1, 2:0, 3:0, 4:2, 5:10, 6:4,
+          7:40, 8:92, 9:352, 10: 724, 11: 2680, 12: 14200, 13: 73712, 14: 365596};
         var startTime = new Date().getTime();
+        console.log("Starting nqueens("+n+")");
         countNQueensSolutions(n);
         var endTime = new Date().getTime();
         console.log("Time:", endTime - startTime);
+        console.log("Expected:", n, "to yield:", expected[n]);
       });
     </script>
   </body>
